@@ -2,7 +2,7 @@
 
 // Create a single supabase client for interacting with your database
 var supabase = window.supabase.createClient('https://ibdxojazwrrzgxptuzsy.supabase.co', 'sb_publishable_NhRm-ZaPWKefryWGtzvAEQ_VvuidJ9U')
-
+let edited=false;
 window.onload = async function () {
   try {
     const { data, error } = await supabase.from('My Posts').select("*").order('id', { ascending: false })
@@ -26,8 +26,8 @@ window.onload = async function () {
                  </figure>
                </div>
                <div class="ms-auto m-2">
-               <button onclick="editPost()" class="btn btn-success">Edit</button>
-               <button onclick="deletePost()" class="btn btn-danger">Delete</button>
+               <button onclick="editPost(event,${post.id},${post.description},${post.title},${post.bg_img})" class="btn btn-success">Edit</button>
+               <button onclick="deletePost(event,${post.id})" class="btn btn-danger">Delete</button>
                </div>
              </div>
      `
@@ -39,18 +39,30 @@ window.onload = async function () {
   }
 }
 var cardBg
-function deletePost() {
+async function deletePost(event, id) {
+  console.log(event, id);
+  try {
+    const {data, error} = await supabase
+      .from('My Posts')
+      .delete()
+      .eq('id', id)
+      if(error)console.log(error);
+      // console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
   var card = event.target.parentNode.parentNode
   card.remove()
 }
-function editPost() {
-  var card = event.target.parentNode.parentNode
-  var title = card.children[1].children[0].children[0].children[0].innerText
-  var description = card.children[1].children[0].children[1].innerText
+function editPost(event,id,desc,title,bg_img) {
+ console.log(title,desc,id);
   document.getElementById("title").value = title
   document.getElementById("description").value = description
+  title=title;
+  description=desc
   card.remove()
   console.log(title, description);
+  edited=true;
 }
 async function post() {
   var title = document.getElementById("title")
@@ -66,7 +78,7 @@ async function post() {
         .from('My Posts')
         .insert({ title: title.value, description: description.value, bg_img: cardBg })
         .select()
-      console.log(data);
+      console.log("Post data", data);
       if (error) console.log(error)
     } catch (error) {
       console.log(error);
