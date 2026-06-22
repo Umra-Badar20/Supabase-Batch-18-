@@ -1,7 +1,7 @@
 // import { createClient } from '@supabase/supabase-js'
 
 // Create a single supabase client for interacting with your database
-var supabase = window.supabase.createClient('https://kcbxcsgutxhffvzrsaft.supabase.co', 'sb_publishable_9AVLXyj6fdhcr_dMsrIM-Q_dP_asGi4')
+var supabase = window.supabase.createClient('https://ibdxojazwrrzgxptuzsy.supabase.co', 'sb_publishable_NhRm-ZaPWKefryWGtzvAEQ_VvuidJ9U')
 
 window.onload = async function () {
   try {
