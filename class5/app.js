@@ -5,6 +5,59 @@ var supabase = window.supabase.createClient('https://ibdxojazwrrzgxptuzsy.supaba
 
 let edited = false;
 let idindex = null;
+
+async function searchPosts(){
+  let searchInput = document.getElementById("searchInput").value
+  console.log(searchInput);
+  try {
+  //   const { data, error } = await supabase
+  // .from('My Posts')
+  // .select("*").order('id', { ascending: false })
+  // .ilike('title', `%${searchInput}%`)
+
+  const { data, error } = await supabase
+  .from('My Posts')
+  .select('*')
+  .or(`title.ilike.%${searchInput}%,description.ilike.%${searchInput}%`)
+
+  var posts = document.getElementById("posts")
+  posts.innerHTML = ""
+  data.forEach(post => {
+    posts.innerHTML += `
+    <div class="card mb-2">
+             <div class="card-header">${post.id} ~Post</div>
+             <div style="background-image:url(${post.bg_img})" class="card-body">
+               <figure>
+                 <blockquote class="blockquote">
+                   <p>
+                     ${post.title}
+                   </p>
+                 </blockquote>
+                 <figcaption class="blockquote-footer">
+                   ${post.description}
+                 </figcaption>
+               </figure>
+             </div>
+             <div class="ms-auto m-2">
+             <button onclick="editPost(event,${post.id},'${post.description}','${post.title}','${post.bg_img}')" class="btn btn-success">Edit</button>
+             <button onclick="deletePost(event,${post.id})" class="btn btn-danger">Delete</button>
+             </div>
+           </div>
+   `})
+
+  console.log(data);
+  if(!data.length){
+    posts.innerHTML= "No posts Found"
+  }
+
+  if(error) console.log(error);
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+
 window.onload = async function () {
   try {
     const { data, error } = await supabase.from('My Posts').select("*").order('id', { ascending: false })

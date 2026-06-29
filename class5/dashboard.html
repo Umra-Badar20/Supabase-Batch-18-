@@ -15,7 +15,11 @@
   <body>
     <nav class="navbar">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Navbar</span>
+        <span class="navbar-brand mb-0 h1"><img class="logo" src="./images/logo.png" alt=""></span>
+        <div class="d-flex" role="search">
+          <input class="form-control me-2" type="search" id="searchInput" placeholder="Search" aria-label="Search"/>
+          <button class="btn btn-outline-light" type="submit" onclick="searchPosts()">Search</button>
+        </div>
       </div>
     </nav>
     <div class="container">
